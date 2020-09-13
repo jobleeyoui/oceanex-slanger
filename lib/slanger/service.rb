@@ -1,5 +1,5 @@
-require 'thin'
-require 'rack'
+require "thin"
+require "rack"
 
 module Slanger
   module Service
@@ -15,6 +15,6 @@ module Slanger
     end
 
     extend self
-    Signal.trap('HUP') { Slanger::Service.stop }
+    Signal.trap("HUP") { Slanger::Service.stop }
   end
 end

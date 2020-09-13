@@ -5,19 +5,19 @@
 # EM channel.
 #
 
-require 'eventmachine'
-require 'forwardable'
-require 'oj'
+require "eventmachine"
+require "forwardable"
+require "oj"
 
 module Slanger
   class Channel
-    extend  Forwardable
+    extend Forwardable
 
     def_delegators :channel, :push
     attr_reader :channel_id
 
     class << self
-      def from channel_id
+      def from(channel_id)
         klass = channel_id[/\Apresence-/] ? PresenceChannel : Channel
 
         klass.lookup(channel_id) || klass.create(channel_id: channel_id)
@@ -35,12 +35,12 @@ module Slanger
         @all ||= []
       end
 
-      def unsubscribe channel_id, subscription_id
+      def unsubscribe(channel_id, subscription_id)
         from(channel_id).try :unsubscribe, subscription_id
       end
 
-      def send_client_message msg
-        from(msg['channel']).try :send_client_message, msg
+      def send_client_message(msg)
+        from(msg["channel"]).try :send_client_message, msg
       end
     end
 
@@ -53,30 +53,29 @@ module Slanger
       @channel ||= EM::Channel.new
     end
 
-    def subscribe *a, &blk
-      Slanger::Redis.hincrby('channel_subscriber_count', channel_id, 1).
+    def subscribe(*a, &blk)
+      Slanger::Redis.hincrby("channel_subscriber_count", channel_id, 1).
         callback do |value|
-          Slanger::Webhook.post name: 'channel_occupied', channel: channel_id if value == 1
-        end
+        Slanger::Webhook.post name: "channel_occupied", channel: channel_id if value == 1
+      end
 
       channel.subscribe *a, &blk
     end
 
-    def unsubscribe *a, &blk
-      Slanger::Redis.hincrby('channel_subscriber_count', channel_id, -1).
+    def unsubscribe(*a, &blk)
+      Slanger::Redis.hincrby("channel_subscriber_count", channel_id, -1).
         callback do |value|
-          Slanger::Webhook.post name: 'channel_vacated', channel: channel_id if value == 0
-        end
+        Slanger::Webhook.post name: "channel_vacated", channel: channel_id if value == 0
+      end
 
       channel.unsubscribe *a, &blk
     end
-
 
     # Send a client event to the EventMachine channel.
     # Only events to channels requiring authentication (private or presence)
     # are accepted. Public channels only get events from the API.
     def send_client_message(message)
-      Slanger::Redis.publish(message['channel'], Oj.dump(message, mode: :compat)) if authenticated?
+      Slanger::Redis.publish(message["channel"], Oj.dump(message, mode: :compat)) if authenticated?
     end
 
     # Send an event received from Redis to the EventMachine channel
@@ -94,10 +93,9 @@ module Slanger
     private
 
     def perform_client_webhook!(message)
-      if (message['event'].start_with?('client-')) then
-
-        event = message.merge({'name' => 'client_event'})
-        event['data'] = Oj.dump(event['data'])
+      if (message["event"].start_with?("client-"))
+        event = message.merge({ "name" => "client_event" })
+        event["data"] = Oj.dump(event["data"])
 
         Slanger::Webhook.post(event)
       end

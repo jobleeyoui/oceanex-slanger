@@ -1,58 +1,23 @@
-# Slanger
+# OceanEx Slanger
 
-## UNMAINTAINED - Slanger is deprecated and unmaintained by its authors. Use at your own risk.
+The OceanEx Slanger inherits from the unmaintained Slanger. The project is backed by OceanEx dev team.
 
-[![Gem Version](https://badge.fury.io/rb/slanger.svg)](http://badge.fury.io/rb/slanger) [![Build Status](https://travis-ci.org/stevegraham/slanger.svg?branch=master)](https://travis-ci.org/stevegraham/slanger)
+We will do regularly bug fixes and security updates. 
 
-**Important! Slanger is not supposed to be included in your Gemfile. RubyGems is used as a distribution mechanism. If you include it in your app, you will likely get dependency conflicts. PRs updating dependencies for compatibility with your app will be closed. Thank you for reading and enjoy Slanger!**
+We might future add more features or provide performance improvements for OceanEx Slanger. The maintenance will continue until we find better option. 
 
-## Typical usage
+Feel free to log any issue or contribute to the code base.
 
-```
-gem install slanger
-redis-server &> /dev/null &
+**Important! OceanEx Slanger is not supposed to be included in your Gemfile. RubyGems is used as a distribution mechanism. If you include it in your app, you will likely get dependency conflicts. 
+PRs updating dependencies for compatibility with your app will be closed!**
 
-slanger --app_key 765ec374ae0a69f4ce44 --secret your-pusher-secret
-```
-
-Slanger is a standalone server ruby implementation of the Pusher protocol.  It
-is not designed to run inside a Rails or sinatra app, but it can be easily
-installed as a gem.
-
-Bundler has multiple purposes, one of which is useful for installation.
-
-## About
-
-Slanger is an open source server implementation of the Pusher protocol written
-in Ruby. It is designed to scale horizontally across N nodes and to be agnostic
-as to which Slanger node a subscriber is connected to, i.e subscribers to the
-same channel are NOT required to be connected to the same Slanger node.
-Multiple Slanger nodes can sit behind a load balancer with no special
-configuration. In essence it was designed to be very easy to scale.
-
-Presence channel state is shared using Redis. Channels are lazily instantiated
-internally within a given Slanger node when the first subscriber connects. When
-a presence channel is instantiated within a Slanger node, it queries Redis for
-the global state across all nodes within the system for that channel, and then
-copies that state internally. Afterwards, when subscribers connect or
-disconnect the node publishes a presence message to all interested nodes, i.e.
-all nodes with at least one subscriber interested in the given channel.
-
-Slanger is smart enough to know if a new channel subscription belongs to the
-same user. It will not send presence messages to subscribers in this case. This
-happens when the user has multiple browser tabs open for example. Using a chat
-room backed by presence channels as a real example, one would not want
-"Barrington" to show up N times in the presence roster because Barrington
-has the chat room open in N browser tabs.
-
-Slanger was designed to be highly available and partition tolerant with
-eventual consistency, which in practise is instantaneous.
+OceanEx Slanger is a standalone server ruby implementation of the Pusher protocol.  It is not designed to run inside a Rails or sinatra app, but it can be easily installed as a gem.
 
 # How to use it
 
 ## Requirements
 
-- Ruby 2.1.2 or greater
+- Ruby 2.6.3 or greater
 - Redis
 
 ## Server setup
@@ -76,19 +41,62 @@ If you want to run multiple slanger instances in a cluster, one option will be t
 A basic config can be found in the folder `examples`.
 Haproxy can be also used for SSL termination, leaving slanger to not have to deal with SSL checks and so on, making it lighter.
 
+## Installation instruction
 
-## Starting the service
+The OceanEx Slanger depends on ruby 2.6.3 and above, please install ruby 2.6.3 first before install the OceanEx Slanger.
+It could also run perfectly on the latest 2.7.1. If you want to align with the latest ruby, you might clone the source
+code and compile yourself. 
 
-Slanger is packaged as a Rubygem. Installing the gem makes the 'slanger' executable available. The `slanger` executable takes arguments, of which two are mandatory: `--app_key` and `--secret`. These can but do not have to be the same as the credentials you use for Pusher. They are required because Slanger performs the same HMAC signing of API requests that Pusher does.
+### Linux(Ubuntu)
 
-__IMPORTANT:__ Redis must be running where Slanger expects it to be (either on localhost:6379 or somewhere else you told Slanger it would be using the option flag) or Slanger will fail silently. I haven't yet figured out how to get em-hiredis to treat an unreachable host as an error
+You could install the right version of ruby via rbenv
 
-```bash
-$ gem install slanger
+```
+sudo apt-get install rbenv
+rbenv install 2.6.3
+rbenv global 2.6.3
+```
 
-$ redis-server &> /dev/null &
+Usually, install the Oceanex Slanger should be pretty easy with the following command. OceanEx Slanger is just a variation of the unmaintained Slanger.
+The execution kept the same way as before. Please check our release note to see what is new in additional to the unmaintained Slanger. 
 
-$ slanger --app_key 765ec374ae0a69f4ce44 --secret your-pusher-secret
+```
+gem install oceanex-slanger
+```
+
+### Mac
+
+Install the ruby version via brew
+
+```
+brew install ruby
+```
+
+You might also install via rbenv 
+```
+brew install rbenv
+rbenv install 2.6.3
+rbenv global 2.6.3
+```
+
+Installation should be pretty straightforward on linux, however, install OceanEx Slanger might fail on mac os.
+This is due to the c compiler converts the warning to error when building the native extension.
+
+If you see installation fails due to `implicit-function-declaration`, you could try the following step to suppress the warning.
+
+```
+gem install oceanex-slanger -- --with-cflags="-Wno-error=implicit-function-declaration"
+```
+
+## Start the OceanEx Slanger in local environment
+
+Both the app key and app secret are just random string, you could choose any string. However, it is recommended to be long
+enough to keep secure.
+
+Oceanex slanger also depends on redis service, specify the redis url when launching the OceanEx Slanger. 
+
+```
+slanger --app_key $APP_KEY --secret $APP_SECRET -r $REDIS_URL
 ```
 
 If all went to plan you should see the following output to STDOUT
@@ -112,26 +120,27 @@ Slanger API server listening on port 4567
 Slanger WebSocket server listening on port 8080
 ```
 
-## Ubuntu upstart script
+## Start the OceanEx Slanger in Docker environment 
 
-If you're using Ubuntu, you might find this upscript very helpful. The steps below will create an init script that will make slanger run at boot and restart if it fails.
-Open `/etc/init/slanger` and add:
-```
-start on started networking and runlevel [2345]
-stop on runlevel [016]
-respawn
-script
-    LANG=en_US.UTF-8 /usr/local/rvm/gems/ruby-RUBY_VERISON/wrappers/slanger --app_key KEY --secret SECRET --redis_address redis://REDIS_IP:REDIS_PORT/REDIS_DB
-end script
-```
-This example assumes you're using rvm and a custom redis configuration
+The OceanEx slanger supports running in docker environment and such approach is already encapsulated in the make command.
+The dependent Redis docker image is also automatically downloaded and started.
 
-Then, to start / stop the service, just do
+For the app key and app secret, please check `docker-compose.yaml` and modify as needed.
+
+### Build the docker image
 ```
-service slanger start
-service slanger stop
+make build
 ```
 
+### Start the OceanEx slanger
+```
+make up
+```
+
+### Stop the service
+```
+make down
+```
 
 ## Modifying your application code to use the Slanger service
 
@@ -207,20 +216,24 @@ I wanted to write a non-trivial evented app. I also want to write a book on even
 
 Pusher is an awesome service, very reasonably priced, and run by an awesome crew. Give them a spin on your next project.
 
-# Author
+# Original Author
 
 - Stevie Graham
 
-# Core Team
+# Original Core Team
 
 - Stevie Graham
 - Mark Burns
 
-# Contributors
+# Original Contributors
 
 - Stevie Graham
 - Mark Burns
 - Florian Gilcher
 - Claudio Poli
 
-&copy; 2011 a Stevie Graham joint.
+# Current Author and Maintainer
+- joblee
+
+
+&copy; 2020 a joblee joint.

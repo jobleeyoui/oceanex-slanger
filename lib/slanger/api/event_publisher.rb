@@ -16,9 +16,6 @@ module Slanger
       def publish_event(channel_id)
         Slanger::Redis.publish(channel_id, event.payload(channel_id))
       end
-
     end
   end
 end
-
-

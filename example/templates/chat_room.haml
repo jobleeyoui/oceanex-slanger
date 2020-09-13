@@ -15,7 +15,7 @@
     %script{src: "//js.pusher.com/2.2/pusher.min.js"}
     %script{src: "/jquery.js"}
     :javascript
-    
+
       var pusher = new Pusher('#{Pusher.key}', {
         wsHost: "0.0.0.0",
         wsPort: "8080",
@@ -39,7 +39,7 @@
 
       pusher.bind('pusher:connection_disconnected', function(ev) {
         $('#presence').empty()
-         $('#messages').append($('<li class="info">**** Unexpectedly lost connection to server ****</li>'))
+        $('#messages').append($('<li class="info">**** Unexpectedly lost connection to server ****</li>'))
       })
 
       myChannel.bind('pusher:member_added', function(member) {

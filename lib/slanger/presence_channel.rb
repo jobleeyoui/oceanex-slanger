@@ -5,10 +5,10 @@
 # EM channel. Keeps data on the subscribers to send it to clients.
 #
 
-require 'eventmachine'
-require 'forwardable'
-require 'fiber'
-require 'oj'
+require "eventmachine"
+require "forwardable"
+require "fiber"
+require "oj"
 
 module Slanger
   class PresenceChannel < Channel
@@ -28,16 +28,16 @@ module Slanger
     def initialize(attrs)
       super
       # Also subscribe the slanger daemon to a Redis channel used for events concerning subscriptions.
-      Slanger::Redis.subscribe 'slanger:connection_notification'
+      Slanger::Redis.subscribe "slanger:connection_notification"
     end
 
     def subscribe(msg, callback, &blk)
-      channel_data = Oj.strict_load msg['data']['channel_data']
+      channel_data = Oj.strict_load msg["data"]["channel_data"]
       public_subscription_id = SecureRandom.uuid
 
       # Send event about the new subscription to the Redis slanger:connection_notification Channel.
       publisher = publish_connection_notification subscription_id: public_subscription_id, online: true,
-        channel_data: channel_data, channel: channel_id
+                                                  channel_data: channel_data, channel: channel_id
 
       # Associate the subscription data to the public id in Redis.
       roster_add public_subscription_id, channel_data
@@ -57,11 +57,11 @@ module Slanger
     end
 
     def ids
-      subscriptions.map { |_,v| v['user_id'] }
+      subscriptions.map { |_, v| v["user_id"] }
     end
 
     def subscribers
-      Hash[subscriptions.map { |_,v| [v['user_id'], v['user_info']] }]
+      Hash[subscriptions.map { |_, v| [v["user_id"], v["user_info"]] }]
     end
 
     def unsubscribe(public_subscription_id)
@@ -95,10 +95,10 @@ module Slanger
       Slanger::Redis.hdel(channel_id, key)
     end
 
-    def publish_connection_notification(payload, retry_count=0)
+    def publish_connection_notification(payload, retry_count = 0)
       # Send a subscription notification to the global slanger:connection_notification
       # channel.
-      Slanger::Redis.publish('slanger:connection_notification', Oj.dump(payload, mode: :compat)).
+      Slanger::Redis.publish("slanger:connection_notification", Oj.dump(payload, mode: :compat)).
         tap { |r| r.errback { publish_connection_notification payload, retry_count.succ unless retry_count == 5 } }
     end
 
@@ -116,19 +116,19 @@ module Slanger
     end
 
     def update_subscribers(message)
-      if message['online']
+      if message["online"]
         # Don't tell the channel subscriptions a new member has been added if the subscriber data
         # is already present in the subscriptions hash, i.e. multiple browser windows open.
-        unless subscriptions.has_value? message['channel_data']
-          push payload('pusher_internal:member_added', message['channel_data'])
+        unless subscriptions.has_value? message["channel_data"]
+          push payload("pusher_internal:member_added", message["channel_data"])
         end
-        subscriptions[message['subscription_id']] = message['channel_data']
+        subscriptions[message["subscription_id"]] = message["channel_data"]
       else
         # Don't tell the channel subscriptions the member has been removed if the subscriber data
         # still remains in the subscriptions hash, i.e. multiple browser windows open.
-        subscriber = subscriptions.delete message['subscription_id']
+        subscriber = subscriptions.delete message["subscription_id"]
         if subscriber && !subscriptions.has_value?(subscriber)
-          push payload('pusher_internal:member_removed', { user_id: subscriber['user_id'] })
+          push payload("pusher_internal:member_removed", { user_id: subscriber["user_id"] })
         end
       end
     end

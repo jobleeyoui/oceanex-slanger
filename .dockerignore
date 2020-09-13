@@ -1,0 +1,8 @@
+/.bundle
+/.env
+/.idea
+/example
+.gitignore
+/.git
+/spec
+.dockerignore

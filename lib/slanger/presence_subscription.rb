@@ -5,8 +5,8 @@ module Slanger
 
       unless channel_data?
         return connection.error({
-          message: "presence-channel is a presence channel and subscription must include channel_data"
-        })
+                 message: "presence-channel is a presence channel and subscription must include channel_data",
+               })
       end
 
       channel.subscribe(@msg, callback) { |m| send_message m }
@@ -15,17 +15,17 @@ module Slanger
     private
 
     def channel_data?
-      @msg['data']['channel_data']
+      @msg["data"]["channel_data"]
     end
 
     def callback
       Proc.new {
-        connection.send_payload(channel_id, 'pusher_internal:subscription_succeeded', {
+        connection.send_payload(channel_id, "pusher_internal:subscription_succeeded", {
           presence: {
             count: channel.subscribers.size,
-            ids:   channel.ids,
-            hash:  channel.subscribers
-          }
+            ids: channel.ids,
+            hash: channel.subscribers,
+          },
         })
       }
     end

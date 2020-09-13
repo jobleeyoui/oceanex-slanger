@@ -1,4 +1,4 @@
-require 'oj'
+require "oj"
 
 module Slanger
   module Api
@@ -20,7 +20,7 @@ module Slanger
       end
 
       def auth_params
-        params.except('channel_id', 'app_id')
+        params.except("channel_id", "app_id")
       end
 
       def socket_id
@@ -38,16 +38,16 @@ module Slanger
       private
 
       def validate_body!
-        @body ||= assert_valid_json!(raw_body.tap{ |s| s.force_encoding('utf-8')})
+        @body ||= assert_valid_json!(raw_body.tap { |s| s.force_encoding("utf-8") })
       end
 
       def validate!
-        raise InvalidRequest.new "no body"        unless raw_body.present?
+        raise InvalidRequest.new "no body" unless raw_body.present?
         raise InvalidRequest.new "invalid params" unless raw_params.is_a? Hash
-        raise InvalidRequest.new "invalid path"   unless path_info.is_a? String
+        raise InvalidRequest.new "invalid path" unless path_info.is_a? String
 
         determine_valid_socket_id
-        channels.each{|id| validate_channel_id!(id)}
+        channels.each { |id| validate_channel_id!(id) }
       end
 
       def validate_socket_id!(socket_id)
@@ -65,7 +65,7 @@ module Slanger
       end
 
       def validate_raw_params!
-        restricted =  user_params.slice "body_md5", "auth_version", "auth_key", "auth_timestamp", "auth_signature", "app_id"
+        restricted = user_params.slice "body_md5", "auth_version", "auth_key", "auth_timestamp", "auth_signature", "app_id"
 
         invalid_keys = restricted.keys - user_params.keys
 
@@ -78,7 +78,7 @@ module Slanger
 
       def authenticate!
         # Raises Signature::AuthenticationError if request does not authenticate.
-        Signature::Request.new('POST', path_info, auth_params).
+        Signature::Request.new("POST", path_info, auth_params).
           authenticate { |key| Signature::Token.new key, Slanger::Config.secret }
       end
 
@@ -93,12 +93,12 @@ module Slanger
       end
 
       def determine_valid_socket_id
-        return validate_socket_id!(body["socket_id"])   if body["socket_id"]
+        return validate_socket_id!(body["socket_id"]) if body["socket_id"]
         return validate_socket_id!(params["socket_id"]) if params["socket_id"]
       end
 
       def user_params
-        raw_params.reject{|k,_| %w(splat captures).include?(k)}
+        raw_params.reject { |k, _| %w(splat captures).include?(k) }
       end
     end
   end
