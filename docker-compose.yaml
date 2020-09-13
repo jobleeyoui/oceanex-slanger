@@ -1,0 +1,19 @@
+version: '2'
+services:
+  redis:
+    image: redis:5.0
+    ports:
+      - "6379:6379"
+  slanger:
+    build:
+      context: ""
+    depends_on:
+      - redis
+    environment:
+      REDIS_URL: redis://0.0.0.0:6379/0
+      APP_KEY: 41f99041ceee27e3a395b08fb542
+      APP_SECRET: b1a5cd689d2b71f1819e0583fe1f
+    ports:
+      - "8080:8080"
+      - "4567:4567"
+

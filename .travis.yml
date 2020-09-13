@@ -1,0 +1,11 @@
+language: ruby
+
+rvm:
+  - 2.6.3
+env:
+  - DB=redis
+
+services:
+  - redis-server
+
+sudo: false
