@@ -216,23 +216,23 @@ I wanted to write a non-trivial evented app. I also want to write a book on even
 
 Pusher is an awesome service, very reasonably priced, and run by an awesome crew. Give them a spin on your next project.
 
-# Author
+# Original Author
 
 - Stevie Graham
 
-# Core Team
+# Original Core Team
 
 - Stevie Graham
 - Mark Burns
 
-# Contributors
+# Original Contributors
 
 - Stevie Graham
 - Mark Burns
 - Florian Gilcher
 - Claudio Poli
 
-# Maintainer
+# Current Author and Maintainer
 - joblee
 
 
