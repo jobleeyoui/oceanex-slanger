@@ -1,4 +1,5 @@
 # OceanEx Slanger
+[![Gem Version](https://badge.fury.io/rb/oceanex-slanger.svg)](http://badge.fury.io/rb/oceanex-slanger) [![Build Status](https://travis-ci.com/jobleeyoui/oceanex-slanger.svg?branch=master)](https://travis-ci.com/jobleeyoui/oceanex-slanger)
 
 The OceanEx Slanger inherits from the unmaintained Slanger. The project is backed by OceanEx dev team.
 
