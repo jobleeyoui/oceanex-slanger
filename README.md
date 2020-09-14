@@ -1,11 +1,11 @@
 # OceanEx Slanger
-[![Gem Version](https://badge.fury.io/rb/oceanex-slanger.svg)](http://badge.fury.io/rb/oceanex-slanger) [![Build Status](https://travis-ci.com/jobleeyoui/oceanex-slanger.svg?branch=master)](https://travis-ci.com/jobleeyoui/oceanex-slanger)
+[![Gem Version](https://badge.fury.io/rb/oceanex-slanger.svg)](https://badge.fury.io/rb/oceanex-slanger) [![Build Status](https://travis-ci.com/jobleeyoui/oceanex-slanger.svg?branch=master)](https://travis-ci.com/jobleeyoui/oceanex-slanger)
 
 The OceanEx Slanger inherits from the unmaintained Slanger. The project is backed by OceanEx dev team.
 
 We will do regularly bug fixes and security updates. 
 
-We might future add more features or provide performance improvements for OceanEx Slanger. The maintenance will continue until we find better option. 
+We might further add more features or provide performance improvements for OceanEx Slanger. The maintenance will continue until we find better option. 
 
 Feel free to log any issue or contribute to the code base.
 
@@ -58,8 +58,7 @@ rbenv install 2.6.3
 rbenv global 2.6.3
 ```
 
-Usually, install the Oceanex Slanger should be pretty easy with the following command. OceanEx Slanger is just a variation of the unmaintained Slanger.
-The execution kept the same way as before. Please check our release note to see what is new in additional to the unmaintained Slanger. 
+Then install the OceanEx Slanger
 
 ```
 gem install oceanex-slanger
@@ -67,7 +66,7 @@ gem install oceanex-slanger
 
 ### Mac
 
-Install the ruby version via brew
+Install the ruby version via home brew
 
 ```
 brew install ruby
@@ -80,8 +79,7 @@ rbenv install 2.6.3
 rbenv global 2.6.3
 ```
 
-Installation should be pretty straightforward on linux, however, install OceanEx Slanger might fail on mac os.
-This is due to the c compiler converts the warning to error when building the native extension.
+Installation might fail when some dependent gems builds their native extension. This is due to the c compiler converts the warning to error when do so.
 
 If you see installation fails due to `implicit-function-declaration`, you could try the following step to suppress the warning.
 
@@ -94,7 +92,7 @@ gem install oceanex-slanger -- --with-cflags="-Wno-error=implicit-function-decla
 Both the app key and app secret are just random string, you could choose any string. However, it is recommended to be long
 enough to keep secure.
 
-Oceanex slanger also depends on redis service, specify the redis url when launching the OceanEx Slanger. 
+Oceanex Slanger also depends on redis service, specify the redis url when launching the OceanEx Slanger. 
 
 ```
 slanger --app_key $APP_KEY --secret $APP_SECRET -r $REDIS_URL
@@ -123,7 +121,7 @@ Slanger WebSocket server listening on port 8080
 
 ## Start the OceanEx Slanger in Docker environment 
 
-The OceanEx slanger supports running in docker environment and such approach is already encapsulated in the make command.
+The OceanEx Slanger supports running in docker environment and such approach is already encapsulated in the make command.
 The dependent Redis docker image is also automatically downloaded and started.
 
 For the app key and app secret, please check `docker-compose.yaml` and modify as needed.
@@ -143,10 +141,9 @@ make up
 make down
 ```
 
-## Modifying your application code to use the Slanger service
+## Modifying your application code to use the OceanEx Slanger service
 
-Once you have a Slanger instance listening for incoming connections you need to alter you application code to use the Slanger endpoint instead of Pusher. Fortunately this is very simple, unobtrusive, easily reversable, and very painless.
-
+Once you have a OceanEx Slanger instance listening for incoming connections you need to alter you application code to use the OceanEx Slanger endpoint instead of Pusher. Fortunately this is very simple, unobtrusive, easily reversable, and very painless.
 
 First you will need to add code to your server side component that publishes events to the Pusher HTTP REST API, usually this means telling the Pusher client to use a different host and port, e.g. consider this Ruby example
 
@@ -174,7 +171,7 @@ Of course you could proxy all requests to `ws.example.com` to port 8080 of your 
 
 # Configuration Options
 
-Slanger supports several configuration options, which can be supplied as command line arguments at invocation. You can also supply a yaml file containing config options. If you use the config file in combination with other configuration options, the values passed on the command line will win. Allows running multiple instances with only a few differences easy.
+OceanEx Slanger supports several configuration options, which can be supplied as command line arguments at invocation. You can also supply a yaml file containing config options. If you use the config file in combination with other configuration options, the values passed on the command line will win. Allows running multiple instances with only a few differences easy.
 
 ```
 -k or --app_key This is the Pusher app key you want to use. This is a required argument on command line or in optional config file
@@ -201,21 +198,6 @@ Slanger supports several configuration options, which can be supplied as command
 
 --pid_file  The path to a file you want slanger to write it's PID to. Optional.
 ```
-
-# Why use Slanger instead of Pusher?
-
-There a few reasons you might want to use Slanger instead of Pusher, e.g.
-
-- You operate in a heavily regulated industry and are worried about sending data to 3rd parties, and it is an organisational requirement that you own your own infrastructure.
-- You might be travelling on an airplane without internet connectivity as I am right now. Airplane rides are very good times to get a lot done, unfortunately external services are also usually unreachable. Remove internet connectivity as a dependency of your development envirionment by running a local Slanger instance in development and Pusher in production.
-- Remove the network dependency from your test suite.
-- You want to extend the Pusher protocol or have some special requirement. If this applies to you, chances are you are out of luck as Pusher is unlikely to implement something to suit your special use case, and rightly so. With Slanger you are free to modify and extend its behavior anyway that suits your purpose.
-
-# Why did you write Slanger
-
-I wanted to write a non-trivial evented app. I also want to write a book on evented programming in Ruby as I feel there is scant good information available on the topic and this project is handy to show publishers.
-
-Pusher is an awesome service, very reasonably priced, and run by an awesome crew. Give them a spin on your next project.
 
 # Original Author
 
