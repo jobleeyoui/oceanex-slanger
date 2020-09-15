@@ -3,18 +3,18 @@ require_relative "lib/slanger/version"
 Gem::Specification.new do |spec|
   spec.name = "oceanex-slanger"
   spec.version = Slanger::VERSION
-  spec.authors = ["joblee"]
+  spec.authors = ["Joblee", "Steve", "Yao", "Meng"]
   spec.email = ["jobleeyoui@gmail.com"]
 
   spec.summary = "A websocket service compatible with Pusher libraries"
-  spec.description = "The oceanex slanger inherits from unmaintained project slanger and continue to provide update and fixes"
-  spec.homepage = "https://github.com/jobleeyoui/oceanex-slanger"
+  spec.description = "The Oceanex Slanger inherits from unmaintained project Slanger and continue to provide update and fixes"
+  spec.homepage = "https://github.com/OceanEx/slanger"
   spec.license = "MIT"
   spec.required_ruby_version = Gem::Requirement.new(">= 2.6.3")
 
   spec.metadata["homepage_uri"] = spec.homepage
-  spec.metadata["source_code_uri"] = "https://github.com/jobleeyoui/oceanex-slanger/archive/v0.7.1.1.zip"
-  spec.metadata["changelog_uri"] = "https://github.com/jobleeyoui/oceanex-slanger/releases"
+  spec.metadata["source_code_uri"] = "https://github.com/OceanEx/slanger/archive/v0.7.1.4.zip"
+  spec.metadata["changelog_uri"] = "https://github.com/OceanEx/slanger/releases"
   spec.files = `git ls-files -z`.split("\x0")
   spec.executables = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
   spec.test_files = spec.files.grep(%r{^(test|spec|features)/})
@@ -29,7 +29,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "activesupport", "~> 6.0.3"
   spec.add_dependency "sinatra", "~> 2.1.0"
   spec.add_dependency "thin", "~> 1.7.2"
-  spec.add_dependency "em-http-request", "~> 1.1.6"
+  spec.add_dependency "em-http-request", "~> 1.1.7"
   spec.add_dependency "oj", "~> 3.10.14"
 
   spec.add_development_dependency "rspec", "~> 3.9.0"

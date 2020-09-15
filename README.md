@@ -215,8 +215,11 @@ OceanEx Slanger supports several configuration options, which can be supplied as
 - Florian Gilcher
 - Claudio Poli
 
-# Current Author and Maintainer
-- joblee
+# Current Core Team and Contributor
+- Joblee
+- Steve
+- Yao
+- Meng
 
 
-&copy; 2020 a joblee joint.
+&copy; 2020 a OceanEx joint.

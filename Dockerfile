@@ -1,6 +1,6 @@
 FROM ruby:2.6.3
 
-LABEL maintainer joblee
+LABEL maintainer=OceanEx
 
 ARG git_revision_id
 # Allow customization of user ID and group ID (it's useful when you use Docker bind mounts)

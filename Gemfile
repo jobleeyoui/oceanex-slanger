@@ -12,7 +12,7 @@ gem "signature", "~> 0.1.8"
 gem "activesupport", "~> 6.0.3"
 gem "sinatra", "~> 2.1.0"
 gem "thin", "~> 1.7.2"
-gem "em-http-request", "~> 1.1.6"
+gem "em-http-request", "~> 1.1.7"
 gem "oj", "~> 3.10.14"
 
 group :development, :test do
