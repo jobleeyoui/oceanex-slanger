@@ -32,7 +32,7 @@ module Slanger
         EventPublisher.publish(valid_request.channels, event)
 
         status 202
-        return Oj.dump({}, mode: :compat)
+        Oj.dump({}, mode: :compat)
       end
 
       post "/apps/:app_id/channels/:channel_id/events" do
@@ -42,7 +42,7 @@ module Slanger
         EventPublisher.publish(valid_request.channels, event)
 
         status 202
-        return Oj.dump({}, mode: :compat)
+        Oj.dump({}, mode: :compat)
       end
 
       def valid_request
